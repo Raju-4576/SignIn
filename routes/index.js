@@ -1,36 +1,39 @@
 var express = require("express");
 var router = express.Router();
-const passport = require("passport");
-require('dotenv').config();
+const auth=require('./auth')
 
-/* GET home page. */
-router.get("/login/success", (req, res) => {
-  if (req.user) {
-    res.status(200).json({
-      error: false,
-      message: "successfully log in",
-      user: req.user,
-    });
-  } else {
-    res.status(403).json({ messge: "not Authorised" });
-  }
-});
 
-router.get("/login/failed", (req, res) => {
-  res.status(401).json({
-    error: true,
-    message: "log in failed",
-  });
-});
 
-router.get("/google",passport.authenticate('google',{scope:['email','profile']}))
+router.use('/auth',auth)
+// const generateToken = (user) => {
+//   return jwt.sign({ id: user.id, email: user.email }, process.env.JWT_SECRET, {
+//   });
+// };
 
-router.get('/google/callback',passport.authenticate("google",{
-  successRedirect:process.env.CLIENT_URL
-}))
+// router.get("/login/success", (req, res) => {
+//   res.status(403).json({ error: true, message: "Use JWT for authentication" });
+// });
 
-router.get('/logout',(req,res)=>{
-  req.logout();
-  req.redirect(process.env.CLIENT_URL)
-})
+// router.get("/login/failed", (req, res) => {
+//   res.status(401).json({
+//     error: true,
+//     message: "Log in failed",
+//   });
+// });
+
+// router.get("/google", passport.authenticate("google", { scope: ["email", "profile"] }));
+
+// router.get(
+//   "/google/callback",
+//   passport.authenticate("google", { session: false }),
+//   (req, res) => {
+//     const token = generateToken(req.user);
+//     res.json({ success: true, token });
+//   }
+// );
+
+// router.get("/logout", (req, res) => {
+//   res.json({ success: true, message: "Logout handled on frontend, remove token" });
+// });
+
 module.exports = router;
