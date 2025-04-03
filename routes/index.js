@@ -1,10 +1,11 @@
 var express = require("express");
 var router = express.Router();
-const auth=require('./auth')
+const fireAuth=require('./fireRoute')
+const passAuth=require('./auth')
 
 
-
-router.use('/auth',auth)
+router.use('/',fireAuth)
+router.use('/auth',passAuth)
 // const generateToken = (user) => {
 //   return jwt.sign({ id: user.id, email: user.email }, process.env.JWT_SECRET, {
 //   });

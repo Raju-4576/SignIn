@@ -1,8 +1,7 @@
 const passport = require("passport");
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
 const User = require("../model/user");
-require("dotenv").config(); 
-
+require("dotenv").config();
 passport.use(
   new GoogleStrategy(
     {
@@ -21,11 +20,10 @@ passport.use(
             email: profile.emails[0].value,
             picture: profile.photos[0].value,
           });
-          console.log("User created success:",user );
-        } else {
-          console.log("User already exists!!");
-        }
-
+          console.log("User created success:", user);                                                                          
+        } else {                                                                          
+          console.log("User already exists!!");                                                                          
+        }                                                                          
         return done(null, user);
       } catch (err) {
         return done(err, null);
@@ -35,4 +33,4 @@ passport.use(
 );
 
 
-module.exports = passport;
+// module.exports = passport;
