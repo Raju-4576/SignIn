@@ -1,7 +1,11 @@
 const passport = require("passport");
+const express = require("express");
+const app = express();
+const auth = require("../config/firebase");
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
 const User = require("../model/user");
 require("dotenv").config();
+
 passport.use(
   new GoogleStrategy(
     {
@@ -10,6 +14,7 @@ passport.use(
       callbackURL: process.env.GOOGLE_CALLBACK_URL,
     },
     async (accessToken, refreshToken, profile, done) => {
+     
       try {
         let user = await User.findOne({ googleId: profile.id });
 
@@ -20,10 +25,10 @@ passport.use(
             email: profile.emails[0].value,
             picture: profile.photos[0].value,
           });
-          console.log("User created success:", user);                                                                          
-        } else {                                                                          
-          console.log("User already exists!!");                                                                          
-        }                                                                          
+          console.log("User created success:", user);
+        } else {
+          console.log("User already exists!!");
+        }
         return done(null, user);
       } catch (err) {
         return done(err, null);

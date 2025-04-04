@@ -17,12 +17,20 @@ router.get(
   })
 );
 
+// router.get(
+//   "/google/callback",
+//   passport.authenticate("google", { session: false }),
+//   (req, res) => {
+//     const token = generateToken(req.user);
+//     res.json({ success: true, token, user: req.user });
+//   }
+// );
+
 router.get(
   "/google/callback",
-  passport.authenticate("google", { session: false }),
+  passport.authenticate("google", { session: false, failureRedirect: "/" }),
   (req, res) => {
-    const token = generateToken(req.user);
-    res.json({ success: true, token, user: req.user });
+    res.json({ message: "Login successful", user: req.user });
   }
 );
 
