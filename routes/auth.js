@@ -1,6 +1,9 @@
 const express = require("express");
 const passport = require("passport");
 const jwt = require("jsonwebtoken");
+const auth = require("../config/firebase");
+const firebase = require( 'firebase/app' )
+// require( 'firebase/auth' )                            
 require("dotenv").config();
 
 const router = express.Router();
@@ -9,6 +12,14 @@ const generateToken = (user) => {
   return jwt.sign({ id: user.id, email: user.email }, process.env.JWT_SECRET);
 };
 
+const refreshToken = async ( token ) => {
+  try {
+      const firebaseToken = await firebase.auth().signInWithCustomToken( token )
+      return firebaseToken.user.getIdToken();
+  } catch ( error ) {
+      console.log( error );
+  }
+}
 router.get(
   "/google",
   passport.authenticate("google", {
@@ -29,8 +40,12 @@ router.get(
 router.get(
   "/google/callback",
   passport.authenticate("google", { session: false, failureRedirect: "/" }),
-  (req, res) => {
-    res.json({ message: "Login successful", user: req.user });
+
+  async (req, res) => {
+    const user = req.user;
+    const firetoken = await auth.createCustomToken(user.id);
+    refreshToken(firetoken)
+    res.json({ message: "Login successful", user: req.user,firetoken });
   }
 );
 

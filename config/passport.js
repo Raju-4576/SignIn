@@ -1,7 +1,7 @@
 const passport = require("passport");
 const express = require("express");
 const app = express();
-const auth = require("../config/firebase");
+const auth = require("./firebase");
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
 const User = require("../model/user");
 require("dotenv").config();

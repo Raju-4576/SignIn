@@ -8,29 +8,28 @@ router.get("/", (req, res) => {
   res.status(200).json({ message: "server is running", loginUrl });
 });
 
-// const verifyGoogleToken = async (idToken) => {
-//   try {
-//     const decodedToken = await auth.verifyIdToken(idToken);
-//     console.log("User Verified:", decodedToken);
-//     return decodedToken;
-//   } catch (error) {
-//     console.error("Authentication Failed:", error);
-//     throw error;
-//   }
-// };
-
-router.get("/google-signin", async (req, res) => {
+const verifyGoogleToken = async (idToken) => {
   try {
-    const user = req.user;
-    console.log(user);
-    
-    const firetoken = auth.createCustomToken(user.id);
-    console.log(firetoken);
-    const userData = await auth.verifyIdToken(firetoken);
+    const decodedToken = await auth.verifyIdToken(idToken);
+    console.log("User Verified:", decodedToken);
+    return decodedToken;
+  } catch (error) {
+    console.error("Authentication Failed:", error);
+    throw error;
+  }
+};
+
+
+router.post("/google-signin", async (req, res) => {
+  const { idToken } = req.body;
+  try {
+    const userData = await verifyGoogleToken(idToken);
     res.status(200).json({ message: "User authenticated", user: userData });
   } catch (error) {
     res.status(401).json({ message: "Authentication failed" });
   }
 });
+
+
 
 module.exports = router;

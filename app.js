@@ -4,7 +4,7 @@ const path = require("path");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
 const passport = require("passport");
-require("./config/passport2"); 
+require("./config/passport"); 
 require('./config/firebase')
 
 const app = express(); 
